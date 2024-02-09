@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lynn.ggkt.vod.mapper.CourseMapper">
+
+    <select id="selectCoursePublishVoById" resultType="com.lynn.ggkt.vo.vod.CoursePublishVo">
+        select
+            c.id,
+            c.title,
+            c.cover,
+            c.lesson_num,
+            c.price,
+            s1.title as subjectTitle,
+            s2.title as subjectParentTitle,
+            t.name as teacherName
+        from <include refid="tables"></include>
+        WHERE c.id=#{id}
+    </select>
+
+    <select id="selectCourseVoById" resultType="com.lynn.ggkt.vo.vod.CourseVo">
+        select
+            c.id,
+            c.title,
+            c.lesson_num AS lessonNum,
+            c.price,
+            c.cover,
+            c.buy_count AS buyCount,
+            c.view_count AS viewCount,
+            c.status,
+            c.publish_time AS publishTime,
+            c.teacher_id AS teacherId,
+            t.name AS teacherName,
+            s1.title AS subjectParentTitle,
+            s2.title AS subjectTitle
+        from <include refid="tables"/>
+        WHERE c.id=#{id}
+    </select>
+
+    <sql id="tables">
+        course c
+        LEFT JOIN teacher t on c.teacher_id=t.id
+        LEFT JOIN `subject` s1 on s1.id=c.subject_id
+        LEFT JOIN `subject` s2 on s2.id=c.subject_parent_id
+    </sql>
+</mapper>

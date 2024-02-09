@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lynn.ggkt.vod.mapper.VideoVisitorMapper">
+    <select id="findCount" resultType="com.lynn.ggkt.vo.vod.VideoVisitorCountVo">
+        select
+            Date(Join_time) as joinTime,
+            count(*) as userCount
+        from video_visitor
+        <where>
+            <if test="startDate != null and startDate != ''">
+                AND DATE(Join_time) &gt;= #{startDate}
+            </if>
+
+            <if test="endDate != null and endDate != ''">
+                AND DATE(Join_time) &lt;= #{endDate}
+            </if>
+            and course_id= #{courseId}
+        </where>
+        GROUP BY DATE(Join_time)
+        ORDER BY DATE(Join_time)
+    </select>
+</mapper>
